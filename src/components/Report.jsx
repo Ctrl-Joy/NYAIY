@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { Check, Copy, Download, Square, Volume2 } from 'lucide-react';
 import { fill } from '../i18n';
 import { downloadPdf, formatDate, reportToText } from '../lib/exportReport';
+import { canSpeak, speak, stopSpeaking } from '../lib/speech';
 import AskPanel from './AskPanel';
 import { Notice, RiskBadge } from './ui';
 
-const canSpeak = typeof window !== 'undefined' && 'speechSynthesis' in window;
 
 function Section({ id, title, sub, count, empty, children }) {
   return (
@@ -35,10 +35,17 @@ export default function Report({ t, lang, report, chatBusy, translating, onAsk, 
   const [copied, setCopied] = useState('');
   const [exporting, setExporting] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [noVoice, setNoVoice] = useState(false);
   const [printHint, setPrintHint] = useState(false);
   const a = report.analysis;
 
-  useEffect(() => () => canSpeak && window.speechSynthesis.cancel(), [report.id]);
+  useEffect(
+    () => () => {
+      stopSpeaking();
+      setSpeaking(false);
+    },
+    [report.id, report.lang]
+  );
 
   const copy = async () => {
     try {
@@ -65,19 +72,17 @@ export default function Report({ t, lang, report, chatBusy, translating, onAsk, 
     }
   };
 
-  const toggleSpeech = () => {
+  const toggleSpeech = async () => {
     if (speaking) {
-      window.speechSynthesis.cancel();
+      stopSpeaking();
       setSpeaking(false);
       return;
     }
-    const utterance = new SpeechSynthesisUtterance(a.summary);
-    utterance.lang = report.lang === 'hi' ? 'hi-IN' : 'en-IN';
-    utterance.rate = 0.95;
-    utterance.onend = () => setSpeaking(false);
-    utterance.onerror = () => setSpeaking(false);
-    window.speechSynthesis.speak(utterance);
+    setNoVoice(false);
     setSpeaking(true);
+    const outcome = await speak(a.summary, report.lang);
+    if (outcome === 'no-voice') setNoVoice(true);
+    if (outcome !== 'stopped') setSpeaking(false);
   };
 
   const sections = [
@@ -130,6 +135,11 @@ export default function Report({ t, lang, report, chatBusy, translating, onAsk, 
               </button>
             )}
           </div>
+          {noVoice && (
+            <p role="status" className="no-print mt-2 text-sm text-muted">
+              {fill(t.noVoice, { lang: t['langName_' + report.lang] })}
+            </p>
+          )}
           {printHint && <p className="no-print mt-2 text-sm text-muted">{t.printHint}</p>}
 
           <div className="no-print mt-6 space-y-3 empty:hidden">

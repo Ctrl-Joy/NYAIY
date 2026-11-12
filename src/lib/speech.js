@@ -33,7 +33,7 @@ export const prepareForSpeech = (text, lang = 'en') => {
     .replace(/\*\*|__|`|#{1,6}\s/g, '')
     .replace(/[“”„"«»]/g, '')
     .replace(/[‘’]/g, "'")
-    .replace(/[\[\]{}<>|]/g, ' ')
+    .replace(/[[\]{}<>|]/g, ' ')
     .replace(/\s*[–—]\s*/g, ', ')
     .replace(/…/g, '. ')
     .replace(/[•·▪●]/g, ', ');

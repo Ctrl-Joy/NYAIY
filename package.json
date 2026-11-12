@@ -16,21 +16,20 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-scripts": "5.0.1",
-    "tesseract.js": "^7.0.0",
-    "web-vitals": "^2.1.4"
+    "tesseract.js": "^7.0.0"
   },
   "scripts": {
     "postinstall": "node -e \"const fs=require('fs');const p='node_modules/pdfjs-dist/build/pdf.worker.min.mjs';const d='public/pdf.worker.min.mjs';if(fs.existsSync(p))fs.copyFileSync(p,d);\"",
+    "dev": "concurrently -n api,web -c blue,green \"npm run server\" \"npm run client\"",
+    "dev:stub": "concurrently -n api,web -c blue,green \"npm run server:stub\" \"npm run client\"",
+    "start": "npm run dev",
     "server": "node --use-system-ca server/index.js",
+    "server:stub": "node -r ./server/dev-stub.js server/index.js",
     "client": "react-scripts start",
-    "dev": "concurrently -n server,client -c blue,green \"npm run server\" \"npm run client\"",
-    "start": "concurrently -n server,client -c blue,green \"npm run server\" \"npm run client\"",
     "build": "react-scripts build",
     "start:prod": "node --use-system-ca server/index.js",
-    "test": "react-scripts test --watchAll=false",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --watchAll=false"
   },
-  "proxy": "http://localhost:3001",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -53,6 +52,7 @@
     "autoprefixer": "^10.5.0",
     "concurrently": "^9.1.2",
     "postcss": "^8.5.15",
-    "tailwindcss": "^3.4.19"
+    "tailwindcss": "^3.4.19",
+    "http-proxy-middleware": "^2.0.9"
   }
 }

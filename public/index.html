@@ -28,6 +28,28 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Static first paint; React replaces this as soon as it loads. -->
+      <div id="shell" class="flex min-h-dvh flex-col">
+        <header class="border-b border-line bg-paper">
+          <div class="mx-auto flex h-14 max-w-6xl items-center px-4 sm:px-6">
+            <span class="font-serif text-xl font-semibold tracking-tight text-accent">NyAIy</span>
+          </div>
+        </header>
+        <main class="mx-auto w-full max-w-3xl px-4 pb-20 pt-10 sm:px-6 sm:pt-20">
+          <h1 class="max-w-2xl font-serif text-[2rem] font-semibold leading-[1.15] tracking-tight sm:text-5xl sm:leading-[1.1]">
+            Understand a legal document before you sign it.
+          </h1>
+          <p class="mt-4 max-w-xl text-base leading-relaxed text-muted sm:mt-5 sm:text-lg">
+            Add a contract, notice or judgment. NyAIy reads it against Indian law, flags the clauses to question and answers your follow-up questions.
+          </p>
+        </main>
+      </div>
+      <script>
+        try {
+          if (localStorage.getItem('nyaiy.lang') === 'hi') document.getElementById('shell').remove();
+        } catch (e) {}
+      </script>
+    </div>
   </body>
 </html>

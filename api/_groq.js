@@ -406,7 +406,7 @@ const normalizeAnalysis = (raw) => {
   const redFlags = list(raw?.pass4?.redFlags)
     .map((f) => ({ pattern: str(f.pattern), found: str(f.found), warning: str(f.warning) }))
     .filter((f) => f.pattern);
-  const score = parseInt(String(raw?.pass4?.scamScore ?? '0').replace(/[^\d]/g, ''), 10);
+  const score = parseInt((String(raw?.pass4?.scamScore ?? '0').match(/\d+/) || ['0'])[0], 10);
 
   return {
     summary: str(raw?.summary),
@@ -438,7 +438,7 @@ Respond in EXACTLY this JSON format with no extra text:
   "pass1": {"clauses":[{"clause":"text","risk":"High|Medium|Low","explanation":"why"}]},
   "pass2": {"deviations":[{"issue":"name","found":"text","standard":"Indian law standard","severity":"High|Medium|Low"}]},
   "pass3": {"laws":[{"clause":"text","law":"Act name","section":"section","implication":"meaning"}]},
-  "pass4": {"redFlags":[{"pattern":"name","found":"text","warning":"why"}],"scamScore":"0-100"},
+  "pass4": {"redFlags":[{"pattern":"name","found":"text","warning":"why"}],"scamScore":<integer from 0 (fair) to 100 (predatory), reflecting how unfair or suspicious the terms are>},
   "rightsCard":[{"right":"name","description":"simple text","law":"Act"}],
   "negotiationClauses":[{"issue":"name","original":"text","suggested":"better text"}]
 }`;
@@ -476,13 +476,18 @@ const answerQuestion = async ({ documentText, question, lang, history }) => {
     {
       role: 'system',
       content: `You are NyAIy, an Indian legal information assistant. ${langInstruction(lang)}
-Answer only about the document below, in plain language, in under 150 words. If the document does not cover the question, say so. This is legal information, not legal advice.
+Answer only about the document below, in plain language, in under 150 words. Write plain text without Markdown. If the document does not cover the question, say so. This is legal information, not legal advice.
 ${wrapDocument(documentText.slice(0, MAX_DOC_CHARS))}`,
     },
     ...turns,
     { role: 'user', content: question },
   ];
-  return groqChat(messages, { maxTokens: 500 });
+  const answer = await groqChat(messages, { maxTokens: 500 });
+  // The interface shows plain text, so stray Markdown emphasis and headings are removed.
+  return String(answer)
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .trim();
 };
 
 // ── Request plumbing ────────────────────────────────────

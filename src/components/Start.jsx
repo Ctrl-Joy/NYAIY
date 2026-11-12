@@ -11,7 +11,7 @@ export default function Start({
   const unavailable = health && (!health.reachable || !health.configured);
 
   return (
-    <div className="rise mx-auto max-w-3xl px-4 pb-20 pt-10 sm:px-6 sm:pt-20">
+    <div className="mx-auto max-w-3xl px-4 pb-20 pt-10 sm:px-6 sm:pt-20">
       <h1 className="max-w-2xl font-serif text-[2rem] font-semibold leading-[1.15] tracking-tight sm:text-5xl sm:leading-[1.1]">
         {t.heroTitle}
       </h1>

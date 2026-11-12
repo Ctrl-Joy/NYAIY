@@ -61,7 +61,7 @@ test('normalises whatever the model returns into a fixed shape', () => {
   const out = groq.normalizeAnalysis({
     summary: '  Fine. ',
     pass1: { clauses: [{ clause: 'A', risk: 'उच्च' }, { clause: '', risk: 'Low' }, 'junk', { clause: 'B', risk: 'weird' }] },
-    pass4: { scamScore: '140%', redFlags: null },
+    pass4: { scamScore: '140/100', redFlags: null },
     rightsCard: 'nope',
   });
   expect(out.summary).toBe('Fine.');

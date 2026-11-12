@@ -1,23 +1,11 @@
-const { sanitizeText, fourPassAnalysis, setCors } = require('./_groq');
+const {
+  ApiError, route, sanitizeText, pickLang, pickDocType, analyzeDocument, MIN_DOC_CHARS,
+} = require('./_groq');
 
-module.exports = async (req, res) => {
-  setCors(res);
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+module.exports = route('POST', async (body) => {
+  const text = sanitizeText(body.text);
+  if (text.length < MIN_DOC_CHARS) {
+    throw new ApiError(400, 'too_short', 'The document is too short to analyse. Add at least a few sentences.');
   }
-
-  try {
-    const text = sanitizeText(req.body?.text);
-    const { lang = 'en', docType = 'general' } = req.body || {};
-    if (text.length < 50) {
-      return res.status(400).json({ error: 'Document text too short for analysis.' });
-    }
-    const analysis = await fourPassAnalysis(text, lang, docType);
-    res.json({ analysis });
-  } catch (err) {
-    console.error('analyze:', err);
-    res.status(500).json({ error: err.message || 'Analysis failed' });
-  }
-};
+  return analyzeDocument(text, pickLang(body.lang), pickDocType(body.docType));
+});

@@ -1,40 +1,17 @@
-const { sanitizeText, wrapDocument, groqChat, setCors, MAX_QUESTION_CHARS } = require('./_groq');
+const {
+  ApiError, route, sanitizeText, pickLang, answerQuestion, MAX_QUESTION_CHARS,
+} = require('./_groq');
 
-module.exports = async (req, res) => {
-  setCors(res);
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  try {
-    const documentText = sanitizeText(req.body?.documentText);
-    const question = sanitizeText(req.body?.question).slice(0, MAX_QUESTION_CHARS);
-    const { lang = 'en', history = [] } = req.body || {};
-    if (!question) {
-      return res.status(400).json({ error: 'Question is required.' });
-    }
-    const langInstruction = lang === 'hi'
-      ? 'Respond in grammatically correct, formal legal Hindi. Crucial: Translate "Civil Law" as "नागरिक कानून" (never "दीवानी कानून").'
-      : 'Respond in English.';
-    const messages = [
-      {
-        role: 'system',
-        content: `You are NyAIy, an Indian legal information assistant. ${langInstruction}
-Answer only about the document below. This is not legal advice.
-${wrapDocument(documentText.slice(0, 2000))}`,
-      },
-      ...history.slice(-6).map((msg) => ({
-        role: msg.role === 'user' ? 'user' : 'assistant',
-        content: String(msg.text || '').slice(0, 1000),
-      })),
-      { role: 'user', content: question },
-    ];
-    const answer = await groqChat(messages, 500);
-    res.json({ answer });
-  } catch (err) {
-    console.error('chat:', err);
-    res.status(500).json({ error: err.message || 'Chat failed' });
-  }
-};
+module.exports = route('POST', async (body) => {
+  const documentText = sanitizeText(body.documentText);
+  const question = sanitizeText(body.question).slice(0, MAX_QUESTION_CHARS);
+  if (!question) throw new ApiError(400, 'no_question', 'Type a question first.');
+  if (!documentText) throw new ApiError(400, 'no_document', 'There is no document to ask about.');
+  const answer = await answerQuestion({
+    documentText,
+    question,
+    lang: pickLang(body.lang),
+    history: body.history,
+  });
+  return { answer: String(answer).trim() };
+});

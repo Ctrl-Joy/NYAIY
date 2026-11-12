@@ -1,23 +1,11 @@
-const { sanitizeText, classifyDocument, setCors } = require('./_groq');
+const {
+  ApiError, route, sanitizeText, pickDocType, classifyDocument, MIN_DOC_CHARS,
+} = require('./_groq');
 
-module.exports = async (req, res) => {
-  setCors(res);
-  if (req.method === 'OPTIONS') return res.status(200).end();
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+module.exports = route('POST', async (body) => {
+  const text = sanitizeText(body.text);
+  if (text.length < MIN_DOC_CHARS) {
+    throw new ApiError(400, 'too_short', 'The document is too short to analyse. Add at least a few sentences.');
   }
-
-  try {
-    const text = sanitizeText(req.body?.text);
-    const docTypeHint = req.body?.docTypeHint || 'general';
-    if (text.length < 20) {
-      return res.status(400).json({ error: 'Document text too short to classify.' });
-    }
-    const result = await classifyDocument(text, docTypeHint);
-    res.json(result);
-  } catch (err) {
-    console.error('classify:', err);
-    res.status(500).json({ error: err.message || 'Classification failed' });
-  }
-};
+  return classifyDocument(text, pickDocType(body.docTypeHint));
+});

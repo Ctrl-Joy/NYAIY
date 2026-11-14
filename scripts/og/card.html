@@ -1,0 +1,67 @@
+<!doctype html>
+<!-- Source for public/og-image.png (1200x630). Not part of the app bundle.
+     Render: chrome --headless=new --screenshot=og-image.png --window-size=1200,630
+             --hide-scrollbars --force-device-scale-factor=1 file:///.../card.html -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=block" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background: #FBFAF7;
+    color: #1A1D21;
+    font-family: Inter, "Noto Sans Devanagari", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+  .bar { position: absolute; left: 0; top: 0; bottom: 0; width: 16px; background: #1E3A5F; }
+  .wrap {
+    position: absolute; inset: 0 0 0 16px;
+    padding: 72px 96px 64px 96px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 18px; }
+  .brand svg { width: 60px; height: 60px; }
+  .word { font-family: "Source Serif 4", Georgia, serif; font-size: 40px; font-weight: 600; letter-spacing: -0.01em; color: #1E3A5F; }
+  h1 {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 72px; font-weight: 600; line-height: 1.08; letter-spacing: -0.02em;
+    max-width: 900px;
+  }
+  .hi {
+    margin-top: 22px;
+    font-family: "Noto Sans Devanagari", sans-serif; font-size: 30px; font-weight: 500; color: #5B616B;
+  }
+  .foot {
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid #E5E2DA; padding-top: 26px;
+    font-size: 22px; color: #5B616B;
+  }
+  .langs { display: flex; gap: 10px; }
+  .langs span {
+    border: 1px solid #E5E2DA; background: #FFFFFF; border-radius: 999px;
+    padding: 6px 16px; font-size: 19px; font-weight: 500; color: #1E3A5F;
+  }
+  .langs span.dev { font-family: "Noto Sans Devanagari", sans-serif; }
+</style>
+</head>
+<body>
+  <div class="bar"></div>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#1E3A5F"/><path d="M10 23V9h2.6l6.8 9.4V9H22v14h-2.6l-6.8-9.4V23z" fill="#FBFAF7"/></svg>
+      <span class="word">NyAIy</span>
+    </div>
+    <div>
+      <h1>Understand a legal document before you sign it.</h1>
+      <p class="hi" lang="hi">हस्ताक्षर करने से पहले अपना कानूनी दस्तावेज़ समझें।</p>
+    </div>
+    <div class="foot">
+      <span>Read against Indian law. Risky clauses flagged in plain language.</span>
+      <div class="langs"><span>English</span><span class="dev">हिंदी</span></div>
+    </div>
+  </div>
+</body>
+</html>

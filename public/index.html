@@ -7,10 +7,11 @@
     <meta name="theme-color" content="#FBFAF7" />
     <meta
       name="description"
-      content="NyAIy reads Indian legal documents and explains the risky clauses, the law that applies and what to ask for. Informational only, not legal advice."
+      content="NyAIy is an AI legal copilot for India. Add a contract, notice or judgment to see risky clauses, the laws that apply and what to ask for, in English or Hindi."
     />
+    <meta name="robots" content="index, follow" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>NyAIy · Understand a legal document before you sign it</title>
+    <title>AI Contract and Legal Document Review for India | NyAIy</title>
     <link rel="canonical" href="https://nyaiy.vercel.app/" />
 
     <meta property="og:type" content="website" />
@@ -31,6 +32,45 @@
     <meta name="twitter:description" content="Add a contract, notice or judgment. NyAIy reads it against Indian law and flags the clauses to question, in English or Hindi." />
     <meta name="twitter:image" content="https://nyaiy.vercel.app/og-image.png" />
     <meta name="twitter:image:alt" content="NyAIy logo with the line: Understand a legal document before you sign it, in English and Hindi." />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://nyaiy.vercel.app/#website",
+            "name": "NyAIy",
+            "url": "https://nyaiy.vercel.app/",
+            "description": "NyAIy is an AI legal copilot for India. Add a contract, notice or judgment to see risky clauses, the laws that apply and what to ask for, in English or Hindi.",
+            "inLanguage": ["en", "hi"],
+            "author": { "@id": "https://www.shreejoybikalp.in/#person" }
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://nyaiy.vercel.app/#app",
+            "name": "NyAIy",
+            "url": "https://nyaiy.vercel.app/",
+            "description": "NyAIy is an AI legal copilot for India. Add a contract, notice or judgment to see risky clauses, the laws that apply and what to ask for, in English or Hindi.",
+            "applicationCategory": "UtilitiesApplication",
+            "operatingSystem": "Web",
+            "inLanguage": ["en", "hi"],
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+            "image": "https://nyaiy.vercel.app/og-image.png",
+            "codeRepository": "https://github.com/Ctrl-Joy/NYAIY",
+            "sameAs": ["https://github.com/Ctrl-Joy/NYAIY"],
+            "isPartOf": { "@id": "https://nyaiy.vercel.app/#website" },
+            "author": { "@id": "https://www.shreejoybikalp.in/#person" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://www.shreejoybikalp.in/#person",
+            "name": "Shreejoy Bikalp",
+            "url": "https://www.shreejoybikalp.in",
+            "sameAs": ["https://github.com/Ctrl-Joy", "https://www.linkedin.com/in/shreejoy-bikalp-283748209"]
+          }
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
